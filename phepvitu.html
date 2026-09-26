@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá STEM: Phép Vị Tự & Ứng Dụng</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
+        header { background-color: #312e81; color: white; padding: 1rem 2rem; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-badge { background: #4f46e5; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-weight: bold; font-size: 1.1rem; }
+        nav { display: flex; gap: 1.5rem; font-size: 0.95rem; font-weight: 500; }
+        nav a { color: #e2e8f0; text-decoration: none; transition: color 0.2s; }
+        nav a:hover { color: #818cf8; }
+        
+        main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 2rem; }
+        
+        section { background: white; border-radius: 1rem; padding: 1.5rem 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        h2 { font-size: 1.5rem; color: #312e81; margin-bottom: 0.75rem; font-weight: 700; }
+        p, li { color: #475569; font-size: 0.95rem; }
+
+        .playground-header { background: #e0e7ff; padding: 1rem 1.5rem; border-bottom: 1px solid #c7d2fe; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top-left-radius: 1rem; border-top-right-radius: 1rem; }
+        .quick-k-btns { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+        .btn-k { padding: 0.25rem 0.6rem; font-size: 0.75rem; background: white; border: 1px solid #818cf8; color: #4338ca; border-radius: 0.25rem; cursor: pointer; transition: background 0.2s; }
+        .btn-k:hover { background: #eef2ff; }
+
+        .playground-grid { display: grid; grid-template-columns: 280px 1fr; background: white; border-bottom-left-radius: 1rem; border-bottom-right-radius: 1rem; overflow: hidden; }
+        @media (max-width: 900px) { .playground-grid { grid-template-columns: 1fr; } }
+
+        .sidebar { background: #f8fafc; padding: 1.25rem; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.9rem; }
+        .control-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .control-group label { font-weight: 600; color: #334155; }
+        select, input[type="number"], input[type="file"] { width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.85rem; background: white; }
+        
+        .canvas-container { position: relative; background: #f1f5f9; display: flex; align-items: center; justify-content: center; min-height: 520px; }
+        canvas { width: 100%; height: 520px; cursor: crosshair; background-color: #ffffff; background-image: linear-gradient(#f1f5f9 1px, transparent 1px), linear-gradient(90deg, #f1f5f9 1px, transparent 1px); background-size: 20px 20px; }
+        
+        .canvas-tip { position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; color: #475569; border: 1px solid #e2e8f0; pointer-events: none; z-index: 10; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+
+        .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .theory-card { background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 0.75rem; }
+        .formula-box { background: white; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #c7d2fe; text-align: center; font-weight: bold; color: #312e81; font-size: 1.1rem; }
+
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .app-card { background: #f8fafc; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 0.5rem; transition: border-color 0.2s; }
+        .app-card:hover { border-color: #818cf8; }
+        .app-icon { width: 40px; height: 40px; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; border-radius: 0.5rem; font-weight: bold; }
+
+        footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 2rem 1rem; font-size: 0.85rem; margin-top: 3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-area">
+                <span class="logo-badge">📐 STEM</span>
+                <div>
+                    <h1 style="font-size: 1.15rem; font-weight: bold;">Phòng Thí Nghiệm Phép Vị Tự (Homothety)</h1>
+                    <p style="font-size: 0.75rem; color: #c7d2fe;">Khám phá hình học tương tác, tỷ lệ & biến đổi không gian</p>
+                </div>
+            </div>
+            <nav>
+                <a href="#playground">Trải nghiệm</a>
+                <a href="#theory">Tính chất & Lý thuyết</a>
+                <a href="#applications">Ứng dụng thực tế</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- INTRO SECTION -->
+        <section>
+            <h2>Chào mừng bạn đến với không gian học tập trực quan!</h2>
+            <p>
+                Phép vị tự tâm I tỉ số k là một trong những phép biến hình quan trọng nhất trong hình học phẳng. Công cụ này cho phép bạn tải lên hình ảnh tùy chỉnh hoặc sử dụng các hình mẫu hình học, tùy chỉnh tâm vị tự, cố định gốc tọa độ hoặc đặt gốc (0,0) về chính giữa, quan sát sự thay đổi tỉ lệ k theo thời gian thực và khám phá các tính chất toán học ẩn sau mỗi chuyển động.
+            </p>
+        </section>
+
+        <!-- INTERACTIVE PLAYGROUND -->
+        <section style="padding: 0; overflow: hidden;" id="playground">
+            <div class="playground-header">
+                <div>
+                    <h3 style="font-size: 1.1rem; color: #312e81; font-weight: 700;">🎛️ Bảng Điều Khiển & Không Gian Tương Tác</h3>
+                    <p style="font-size: 0.75rem; color: #4338ca;">Kéo thả trực tiếp tâm I hoặc hình trên bảng vẽ, hoặc nhập thông số chính xác bên dưới.</p>
+                </div>
+                <div class="quick-k-btns">
+                    <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Tỉ số k:</span>
+                    <button class="btn-k" onclick="setK(-2)">-2</button>
+                    <button class="btn-k" onclick="setK(-1)">-1</button>
+                    <button class="btn-k" onclick="setK(-0.5)">-0.5</button>
+                    <button class="btn-k" onclick="setK(0.5)">0.5</button>
+                    <button class="btn-k" onclick="setK(1.5)">1.5</button>
+                    <button class="btn-k" onclick="setK(2)">2</button>
+                </div>
+            </div>
+
+            <div class="playground-grid">
+                <!-- Sidebar Controls -->
+                <div class="sidebar">
+                    <!-- Resource Selection -->
+                    <div class="control-group">
+                        <label>1. Chọn đối tượng gốc:</label>
+                        <select id="shapeSelect" onchange="changeShapeType()">
+                            <option value="image">Tải lên hình ảnh tùy chỉnh</option>
+                            <option value="star" selected>Hình Ngôi Sao 5 Cánh</option>
+                            <option value="triangle">Tam giác ABC</option>
+                            <option value="house">Ngôi nhà hình học</option>
+                        </select>
+                        <div id="imageUploadContainer" style="display: none; margin-top: 0.5rem;">
+                            <input type="file" id="imageLoader" accept="image/*">
+                        </div>
+                    </div>
+
+                    <!-- Ratio K Slider -->
+                    <div class="control-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label>2. Tỉ số vị tự (k):</label>
+                            <span id="kValueDisplay" style="font-weight: bold; color: #4338ca; background: #e0e7ff; padding: 0.1rem 0.4rem; border-radius: 0.25rem;">1.5</span>
+                        </div>
+                        <input type="range" id="kSlider" min="-3" max="3" step="0.1" value="1.5" style="accent-color: #4f46e5; width: 100%;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
+                            <span>-3.0</span>
+                            <span>0</span>
+                            <span>+3.0</span>
+                        </div>
+                    </div>
+
+                    <!-- Center Coordinates -->
+                    <div class="control-group" style="background: white; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+                        <label>3. Tọa độ Tâm vị tự I:</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.25rem;">
+                            <div>
+                                <span style="font-size: 0.75rem; color: #64748b;">X_I:</span>
+                                <input type="number" id="centerXInput" value="0" style="text-align: center;">
+                            </div>
+                            <div>
+                                <span style="font-size: 0.75rem; color: #64748b;">Y_I:</span>
+                                <input type="number" id="centerYInput" value="0" style="text-align: center;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coordinate System Settings -->
+                    <div class="control-group" style="background: #e0e7ff55; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #c7d2fe;">
+                        <label style="color: #312e81;">4. Hệ thống tọa độ:</label>
+                        <button onclick="resetOriginCenter()" style="width: 100%; padding: 0.5rem; background: #4f46e5; color: white; border: none; border-radius: 0.35rem; font-size: 0.8rem; font-weight: 500; cursor: pointer; margin-top: 0.25rem;">
+                            🎯 Đặt gốc (0,0) chính giữa
+                        </button>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem;">
+                            <span style="color: #475569;" title="Khóa tọa độ gốc không cho phép kéo thả tâm I tự do">Cố định gốc tọa độ:</span>
+                            <input type="checkbox" id="fixOriginCheckbox" checked style="accent-color: #4f46e5; width: 1rem; height: 1rem;">
+                        </div>
+                    </div>
+
+                    <!-- Display Options -->
+                    <div class="control-group" style="border-top: 1px solid #e2e8f0; padding-top: 0.75rem;">
+                        <label>Tùy chọn hiển thị:</label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #475569; cursor: pointer;">
+                            <input type="checkbox" id="showRaysCheckbox" checked style="accent-color: #4f46e5; width: 1rem; height: 1rem;">
+                            <span>Hiển thị tia vị tự qua tâm I</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #475569; cursor: pointer; margin-top: 0.25rem;">
+                            <input type="checkbox" id="showGridCheckbox" checked style="accent-color: #4f46e5; width: 1rem; height: 1rem;">
+                            <span>Hiển thị lưới tọa độ & trục</span>
+                        </label>
+                    </div>
+
+                    <button onclick="resetCanvasView()" style="width: 100%; padding: 0.5rem; background: #e2e8f0; color: #334155; border: none; border-radius: 0.35rem; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
+                        Khôi phục mặc định
+                    </button>
+                </div>
+
+                <!-- Canvas Area -->
+                <div class="canvas-container">
+                    <div class="canvas-tip">
+                        <p>💡 <strong>Mẹo tương tác:</strong> Kéo chuột trên bảng để di chuyển tâm I hoặc hình gốc.</p>
+                        <p style="color: #64748b; margin-top: 2px;">Hình gốc: Nét xanh | Hình biến đổi: Nét đỏ</p>
+                    </div>
+                    <canvas id="homothetyCanvas"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- THEORY & PROPERTIES -->
+        <section id="theory">
+            <h2>📚 Lý Thuyết & Tính Chất Của Phép Vị Tự</h2>
+            <p style="margin-bottom: 1rem;">Nền tảng toán học đằng sau công cụ trực quan hóa STEM</p>
+
+            <div class="theory-grid">
+                <!-- Definition Card -->
+                <div class="theory-card">
+                    <h3 style="font-size: 1.1rem; color: #312e81; font-weight: 700;">📌 Định nghĩa toán học</h3>
+                    <p>
+                        Phép vị tự tâm I, tỉ số k (k &neq; 0) là phép biến hình biến mỗi điểm M thành điểm M' thỏa mãn hệ thức vectơ:
+                    </p>
+                    <div class="formula-box">
+                        &#x1D4FF;IM' = k &middot; &#x1D4FF;IM
+                    </div>
+                    <p style="font-size: 0.85rem; color: #64748b;">
+                        - Nếu k &gt; 0, điểm M' nằm cùng phía với M đối với tâm I (trên tia IM).<br>
+                        - Nếu k &lt; 0, điểm M' nằm khác phía với M đối với tâm I (trên tia đối của tia IM).<br>
+                        - Đặc biệt: khi k = 1 là phép đồng nhất; khi k = -1 là phép đối xứng tâm qua I.
+                    </p>
+                </div>
+
+                <!-- Properties Card -->
+                <div class="theory-card">
+                    <h3 style="font-size: 1.1rem; color: #312e81; font-weight: 700;">⚡ Các tính chất hình học</h3>
+                    <ul style="padding-left: 1.25rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <li><strong>Bảo toàn góc:</strong> Góc giữa hai đường thẳng bất kỳ luôn bằng góc giữa hai đường ảnh của chúng.</li>
+                        <li><strong>Tỉ lệ khoảng cách:</strong> Nếu phép vị tự tỉ số k biến hai điểm M, N thành M', N' thì khoảng cách giữa hai điểm ảnh: M'N' = |k| &middot; MN.</li>
+                        <li><strong>Quan hệ diện tích:</strong> Diện tích hình biến đổi tỉ lệ với bình phương trị tuyệt đối của tỉ số vị tự: S' = k<sup>2</sup> &middot; S.</li>
+                        <li><strong>Đường thẳng & Đường tròn:</strong> Biến đường thẳng thành đường thẳng song song hoặc trùng; biến đường tròn bán kính R thành đường tròn bán kính |k|R.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis of K -->
+            <div style="background: #e0e7ff33; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #c7d2fe; margin-top: 1.5rem;">
+                <h3 style="font-size: 1rem; color: #312e81; font-weight: 700; margin-bottom: 0.75rem;">🔍 Phân tích chi tiết các trường hợp của tỉ số k:</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; font-size: 0.85rem;">
+                    <div style="background: white; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #c7d2fe;">
+                        <strong style="color: #4338ca; display: block; margin-bottom: 0.25rem;">Trường hợp |k| &gt; 1</strong>
+                        <p>Hình ảnh biến đổi được phóng to so với hình gốc (ví dụ: k = 2 hoặc k = -2). Kích thước tuyến tính tăng lên |k| lần.</p>
+                    </div>
+                    <div style="background: white; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #c7d2fe;">
+                        <strong style="color: #4338ca; display: block; margin-bottom: 0.25rem;">Trường hợp 0 &lt; |k| &lt; 1</strong>
+                        <p>Hình ảnh bị thu nhỏ lại so với hình gốc (ví dụ: k = 0.5 hoặc k = -0.5). Kích thước thu hẹp còn |k| lần.</p>
+                    </div>
+                    <div style="background: white; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #c7d2fe;">
+                        <strong style="color: #4338ca; display: block; margin-bottom: 0.25rem;">Trường hợp k &lt; 0 (Âm)</strong>
+                        <p>Hình ảnh bị đảo ngược hướng qua tâm vị tự I (lộn ngược đầu hoặc quay hướng đối diện do chiều vectơ bị nghịch đảo).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REAL WORLD APPLICATIONS -->
+        <section id="applications">
+            <h2>🌐 Ứng Dụng Thực Tiễn Của Phép Vị Tự trong STEM & Đời Sống</h2>
+            <p style="margin-bottom: 1rem;">Từ thiết kế kỹ thuật, quang học cho đến công nghệ hiện đại</p>
+
+            <div class="app-grid">
+                <!-- App 1 -->
+                <div class="app-card">
+                    <div class="app-icon">📷</div>
+                    <h3 style="font-size: 1rem; color: #1e293b; font-weight: 700;">Quang học & Máy chiếu ảnh</h3>
+                    <p style="font-size: 0.85rem;">
+                        Nguyên lý hoạt động của máy ảnh, thấu kính hội tụ, kính lúp và máy chiếu phim áp dụng trực tiếp phép vị tự. Tâm thấu kính là tâm vị tự I, khoảng cách tiêu cự quyết định tỉ số phóng đại ảnh trên màn chiếu hoặc cảm biến.
+                    </p>
+                </div>
+
+                <!-- App 2 -->
+                <div class="app-card">
+                    <div class="app-icon">🏗️</div>
+                    <h3 style="font-size: 1rem; color: #1e293b; font-weight: 700;">Thiết kế CAD & Bản đồ quy hoạch</h3>
+                    <p style="font-size: 0.85rem;">
+                        Trong kỹ thuật chế tạo cơ khí và kiến trúc, các kỹ sư sử dụng tỉ lệ bản vẽ (Scale down/up) dựa trên phép vị tự để thu nhỏ công trình khổng lồ thành bản vẽ chi tiết hoặc phóng to vi mạch điện tử lên màn hình thiết kế.
+                    </p>
+                </div>
+
+                <!-- App 3 -->
+                <div class="app-card">
+                    <div class="app-icon">💻</div>
+                    <h3 style="font-size: 1rem; color: #1e293b; font-weight: 700;">Đồ họa máy tính & Game Engine</h3>
+                    <p style="font-size: 0.85rem;">
+                        Các phép biến đổi ma trận 2D/3D trong lập trình game, đồ họa máy tính (như tính năng zoom-in/zoom-out, hiệu ứng phóng to nhân vật) đều thực hiện nhân tọa độ điểm ảnh với ma trận vị tự tỉ lệ k tương ứng.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Phòng Thí Nghiệm Trực Quan Phép Vị Tự - Dự án học tập STEM tích hợp Toán học & Công nghệ.</p>
+        <p>&copy; 2026 STEM Interactive Learning Lab. All rights reserved.</p>
+    </footer>
+
+    <!-- Interactive Canvas Script -->
+    <script>
+        const canvas = document.getElementById('homothetyCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // UI Controls
+        const kSlider = document.getElementById('kSlider');
+        const kValueDisplay = document.getElementById('kValueDisplay');
+        const shapeSelect = document.getElementById('shapeSelect');
+        const imageUploadContainer = document.getElementById('imageUploadContainer');
+        const imageLoader = document.getElementById('imageLoader');
+        const centerXInput = document.getElementById('centerXInput');
+        const centerYInput = document.getElementById('centerYInput');
+        const fixOriginCheckbox = document.getElementById('fixOriginCheckbox');
+        const showRaysCheckbox = document.getElementById('showRaysCheckbox');
+        const showGridCheckbox = document.getElementById('showGridCheckbox');
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            draw();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        let k = parseFloat(kSlider.value);
+        let center = { x: 0, y: 0 }; 
+        let shapeOffset = { x: 80, y: 50 }; 
+        let customImage = null;
+        let imageLoaded = false;
+
+        let isDraggingCenter = false;
+        let isDraggingShape = false;
+        let dragStartMouse = { x: 0, y: 0 };
+        let initialCenter = { x: 0, y: 0 };
+        let initialShapeOffset = { x: 0, y: 0 };
+
+        function toPixel(x, y) {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+            return {
+                x: w / 2 + x,
+                y: h / 2 - y 
+            };
+        }
+
+        function toMath(px, py) {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+            return {
+                x: px - w / 2,
+                y: h / 2 - py
+            };
+        }
+
+        window.setK = function(val) {
+            kSlider.value = val;
+            k = val;
+            kValueDisplay.innerText = val;
+            draw();
+        }
+
+        window.resetOriginCenter = function() {
+            center = { x: 0, y: 0 };
+            centerXInput.value = 0;
+            centerYInput.value = 0;
+            draw();
+        }
+
+        window.resetCanvasView = function() {
+            k = 1.5;
+            kSlider.value = 1.5;
+            kValueDisplay.innerText = "1.5";
+            center = { x: 0, y: 0 };
+            shapeOffset = { x: 80, y: 50 };
+            centerXInput.value = 0;
+            centerYInput.value = 0;
+            fixOriginCheckbox.checked = true;
+            showRaysCheckbox.checked = true;
+            showGridCheckbox.checked = true;
+            shapeSelect.value = "star";
+            imageUploadContainer.style.display = "none";
+            draw();
+        }
+
+        window.changeShapeType = function() {
+            if (shapeSelect.value === 'image') {
+                imageUploadContainer.style.display = 'block';
+            } else {
+                imageUploadContainer.style.display = 'none';
+            }
+            draw();
+        }
+
+        imageLoader.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                customImage = new Image();
+                customImage.onload = function() {
+                    imageLoaded = true;
+                    draw();
+                }
+                customImage.src = event.target.result;
+            }
+            if (e.target.files[0]) {
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        kSlider.addEventListener('input', (e) => {
+            k = parseFloat(e.target.value);
+            kValueDisplay.innerText = k;
+            draw();
+        });
+
+        centerXInput.addEventListener('change', (e) => {
+            center.x = parseFloat(e.target.value) || 0;
+            draw();
+        });
+
+        centerYInput.addEventListener('change', (e) => {
+            center.y = parseFloat(e.target.value) || 0;
+            draw();
+        });
+
+        function getBaseShapePoints() {
+            const type = shapeSelect.value;
+            const ox = shapeOffset.x;
+            const oy = shapeOffset.y;
+
+            if (type === 'triangle') {
+                return [
+                    { x: ox - 40, y: oy - 30, label: 'A' },
+                    { x: ox + 50, y: oy - 30, label: 'B' },
+                    { x: ox + 10, y: oy + 50, label: 'C' }
+                ];
+            } else if (type === 'house') {
+                return [
+                    { x: ox - 30, y: oy - 30, label: 'P1' },
+                    { x: ox + 30, y: oy - 30, label: 'P2' },
+                    { x: ox + 30, y: oy + 30, label: 'P3' },
+                    { x: ox - 30, y: oy + 30, label: 'P4' },
+                    { x: ox, y: oy + 60, label: 'P5' }
+                ];
+            } else {
+                const pts = [];
+                const R = 45, r = 20;
+                for (let i = 0; i < 10; i++) {
+                    const radius = (i % 2 === 0) ? R : r;
+                    const angle = (i * Math.PI) / 5 - Math.PI / 2;
+                    pts.push({
+                        x: ox + radius * Math.cos(angle),
+                        y: oy + radius * Math.sin(angle),
+                        label: 'S' + (i+1)
+                    });
+                }
+                return pts;
+            }
+        }
+
+        function draw() {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+            ctx.clearRect(0, 0, w, h);
+
+            centerXInput.value = center.x;
+            centerYInput.value = center.y;
+
+            if (showGridCheckbox.checked) {
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 1;
+                const gridSize = 40;
+                const centerPx = toPixel(0, 0);
+
+                for (let x = centerPx.x % gridSize; x < w; x += gridSize) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+                }
+                for (let y = centerPx.y % gridSize; y < h; y += gridSize) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+                }
+
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(0, centerPx.y); ctx.lineTo(w, centerPx.y); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(centerPx.x, 0); ctx.lineTo(centerPx.x, h); ctx.stroke();
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = '11px sans-serif';
+                ctx.fillText('0', centerPx.x + 5, centerPx.y + 15);
+                ctx.fillText('X', w - 15, centerPx.y - 8);
+                ctx.fillText('Y', centerPx.x + 8, 15);
+            }
+
+            const centerPix = toPixel(center.x, center.y);
+
+            if (shapeSelect.value === 'image' && imageLoaded && customImage) {
+                const origW = 120, origH = 90;
+                const origCenterMath = { x: shapeOffset.x, y: shapeOffset.y };
+                const origTopLeftMath = { x: origCenterMath.x - origW / 2, y: origCenterMath.y + origH / 2 };
+                
+                const transCenterMath = {
+                    x: center.x + k * (origCenterMath.x - center.x),
+                    y: center.y + k * (origCenterMath.y - center.y)
+                };
+                const transW = origW * Math.abs(k);
+                const transH = origH * Math.abs(k);
+                const transTopLeftMath = {
+                    x: transCenterMath.x - transW / 2,
+                    y: transCenterMath.y + transH / 2
+                };
+
+                if (showRaysCheckbox.checked) {
+                    ctx.strokeStyle = 'rgba(99, 102, 241, 0.35)';
+                    ctx.setLineDash([4, 4]);
+                    ctx.lineWidth = 1;
+                    const corners = [
+                        { x: origCenterMath.x - origW/2, y: origCenterMath.y + origH/2 },
+                        { x: origCenterMath.x + origW/2, y: origCenterMath.y + origH/2 },
+                        { x: origCenterMath.x + origW/2, y: origCenterMath.y - origH/2 },
+                        { x: origCenterMath.x - origW/2, y: origCenterMath.y - origH/2 }
+                    ];
+                    corners.forEach(c => {
+                        const tc = {
+                            x: center.x + k * (c.x - center.x),
+                            y: center.y + k * (c.y - center.y)
+                        };
+                        const p2 = toPixel(tc.x, tc.y);
+                        ctx.beginPath();
+                        ctx.moveTo(centerPix.x, centerPix.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    });
+                    ctx.setLineDash([]);
+                }
+
+                ctx.save();
+                ctx.globalAlpha = 0.65;
+                const op1 = toPixel(origTopLeftMath.x, origTopLeftMath.y);
+                ctx.drawImage(customImage, op1.x, op1.y, origW, origH);
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(op1.x, op1.y, origW, origH);
+                ctx.fillStyle = '#1e40af';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText('Hình Gốc (Image)', op1.x, op1.y - 8);
+                ctx.restore();
+
+                ctx.save();
+                ctx.globalAlpha = 0.9;
+                const tp1 = toPixel(transTopLeftMath.x, transTopLeftMath.y);
+                ctx.translate(tp1.x + transW / 2, tp1.y + transH / 2);
+                if (k < 0) {
+                    ctx.scale(-1, -1);
+                }
+                ctx.drawImage(customImage, -transW / 2, -transH / 2, transW, transH);
+                ctx.restore();
+
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2.5;
+                ctx.strokeRect(tp1.x, tp1.y, transW, transH);
+                ctx.fillStyle = '#b91c1c';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText(`Hình Biến Đổi (k = ${k})`, tp1.x, tp1.y - 8);
+
+            } else {
+                const basePoints = getBaseShapePoints();
+                const transPoints = basePoints.map(p => {
+                    return {
+                        x: center.x + k * (p.x - center.x),
+                        y: center.y + k * (p.y - center.y),
+                        label: p.label + "'"
+                    };
+                });
+
+                if (showRaysCheckbox.checked) {
+                    ctx.strokeStyle = 'rgba(99, 102, 241, 0.35)';
+                    ctx.setLineDash([4, 4]);
+                    ctx.lineWidth = 1;
+                    basePoints.forEach((p, idx) => {
+                        const tp = transPoints[idx];
+                        const tpPix = toPixel(tp.x, tp.y);
+                        ctx.beginPath();
+                        ctx.moveTo(centerPix.x, centerPix.y);
+                        ctx.lineTo(tpPix.x, tpPix.y);
+                        ctx.stroke();
+                    });
+                    ctx.setLineDash([]);
+                }
+
+                ctx.beginPath();
+                basePoints.forEach((p, idx) => {
+                    const pix = toPixel(p.x, p.y);
+                    if (idx === 0) ctx.moveTo(pix.x, pix.y);
+                    else ctx.lineTo(pix.x, pix.y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+                ctx.fill();
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                basePoints.forEach(p => {
+                    const pix = toPixel(p.x, p.y);
+                    ctx.fillStyle = '#1e40af';
+                    ctx.font = '11px sans-serif';
+                    ctx.fillText(p.label, pix.x + 6, pix.y - 6);
+                });
+
+                ctx.beginPath();
+                transPoints.forEach((p, idx) => {
+                    const pix = toPixel(p.x, p.y);
+                    if (idx === 0) ctx.moveTo(pix.x, pix.y);
+                    else ctx.lineTo(pix.x, pix.y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
+                ctx.fill();
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                transPoints.forEach(p => {
+                    const pix = toPixel(p.x, p.y);
+                    ctx.fillStyle = '#b91c1c';
+                    ctx.font = 'bold 11px sans-serif';
+                    ctx.fillText(p.label, pix.x + 6, pix.y - 6);
+                });
+            }
+
+            ctx.beginPath();
+            ctx.arc(centerPix.x, centerPix.y, 7, 0, 2 * Math.PI);
+            ctx.fillStyle = '#4f46e5';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ffffff';
+            ctx.stroke();
+
+            ctx.fillStyle = '#312e81';
+            ctx.font = 'bold 13px sans-serif';
+            ctx.fillText(`Tâm I (${center.x}, ${center.y})`, centerPix.x + 12, centerPix.y + 4);
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const mathCoord = toMath(mouseX, mouseY);
+            const centerPix = toPixel(center.x, center.y);
+
+            const distToCenter = Math.hypot(mouseX - centerPix.x, mouseY - centerPix.y);
+            if (distToCenter < 15) {
+                isDraggingCenter = true;
+            } else {
+                isDraggingShape = true;
+            }
+            dragStartMouse = mathCoord;
+            initialCenter = { ...center };
+            initialShapeOffset = { ...shapeOffset };
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDraggingCenter && !isDraggingShape) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const mathCoord = toMath(mouseX, mouseY);
+            const dx = mathCoord.x - dragStartMouse.x;
+            const dy = mathCoord.y - dragStartMouse.y;
+
+            if (isDraggingCenter) {
+                if (!fixOriginCheckbox.checked) {
+                    center.x = Math.round(initialCenter.x + dx);
+                    center.y = Math.round(initialCenter.y + dy);
+                }
+            } else if (isDraggingShape) {
+                shapeOffset.x = initialShapeOffset.x + dx;
+                shapeOffset.y = initialShapeOffset.y + dy;
+            }
+            draw();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingCenter = false;
+            isDraggingShape = false;
+        });
+
+        resizeCanvas();
+    </script>
+</body>
+</html>
